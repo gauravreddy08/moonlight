@@ -1,27 +1,27 @@
 ---
-description: Configure moonlighter trading settings via an interactive wizard (or a one-shot instruction).
+description: Configure moonlight trading settings via an interactive wizard (or a one-shot instruction).
 allowed-tools: Read, Write, Bash, AskUserQuestion
 ---
 
-Manage moonlighter configuration. No trading happens here — this only edits
-config via the bundled `moonlighter` command (on your PATH while the plugin is
+Manage moonlight configuration. No trading happens here — this only edits
+config via the bundled `moonlight` command (on your PATH while the plugin is
 enabled). Zero Claude credits beyond this turn.
 
 First, always read the current config so you can reflect existing values:
-`moonlighter get config`
+`moonlight get config`
 
 ## If `$ARGUMENTS` is non-empty (one-shot mode)
 
-Apply exactly what I asked with `moonlighter set config ...`, then re-print the
+Apply exactly what I asked with `moonlight set config ...`, then re-print the
 config. Examples:
-- `moonlighter set config enabled true` · `moonlighter set config mode auto`
-- `moonlighter set config cadenceMinutes 20` · `moonlighter set config marketHoursOnly false`
-- `moonlighter set config maxRunsPerDay 8` · `moonlighter set config tradeModel claude-haiku-4-5`
-- `moonlighter set config budgetCap 250` · `moonlighter set config maxPositionSize 100`
-- `moonlighter set config allowedSymbols '["NVDA","AAPL"]'` · `moonlighter set config blocklist '["GME"]'`
-- `moonlighter set config strategyNotes "Only dividend large-caps."`
-- `moonlighter set config tickerMode always` (or `events`, `never`)
-- `moonlighter set config surfaces.chatPopins false` · `moonlighter set config surfaces.desktopNotif false`
+- `moonlight set config enabled true` · `moonlight set config mode auto`
+- `moonlight set config cadenceMinutes 20` · `moonlight set config marketHoursOnly false`
+- `moonlight set config maxRunsPerDay 8` · `moonlight set config tradeModel claude-haiku-4-5`
+- `moonlight set config budgetCap 250` · `moonlight set config maxPositionSize 100`
+- `moonlight set config allowedSymbols '["NVDA","AAPL"]'` · `moonlight set config blocklist '["GME"]'`
+- `moonlight set config strategyNotes "Only dividend large-caps."`
+- `moonlight set config tickerMode always` (or `events`, `never`)
+- `moonlight set config surfaces.chatPopins false` · `moonlight set config surfaces.desktopNotif false`
 
 ## If `$ARGUMENTS` is empty (interactive wizard)
 
@@ -30,7 +30,7 @@ the option that matches the CURRENT config value the first option and append
 " (current)" to its label, so it reads like a settings panel. Ask these four
 questions in a single AskUserQuestion call:
 
-1. **header "Status"** — "Should moonlighter trade in the background?"
+1. **header "Status"** — "Should moonlight trade in the background?"
    - `Enabled` — runs background cycles when due and you're active
    - `Disabled` — pause all background activity
 
@@ -54,7 +54,7 @@ questions in a single AskUserQuestion call:
    (The user can pick "Other" to type a custom dollar amount — if so, set both
    budgetCap and maxPositionSize to that number.)
 
-Apply those four answers with `moonlighter set config ...`.
+Apply those four answers with `moonlight set config ...`.
 
 Then ask a SECOND AskUserQuestion call for the deeper settings (again mark the
 current value first with " (current)"):

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 /*
- * moonlighter — statusline ticker. Zero LLM calls.
+ * moonlight — statusline ticker. Zero LLM calls.
  *
  * Claude Code runs this every ~1s (refreshInterval) and passes session JSON on
  * stdin (ignored here). We read state.json and render a single ANSI line.
@@ -18,7 +18,7 @@ const path = require('path');
 const os = require('os');
 
 const DATA_DIR =
-  process.env.CLAUDE_PLUGIN_DATA || path.join(os.homedir(), '.moonlighter');
+  process.env.CLAUDE_PLUGIN_DATA || path.join(os.homedir(), '.moonlight');
 
 // ANSI color (safe everywhere ANSI works)
 const C = {
@@ -85,12 +85,12 @@ function main() {
 
   if (!cfg.enabled) {
     if (mode === 'events') return; // nothing to event on
-    out(`${C.gray}* moonlighter idle - /invest-config to enable${C.reset}`);
+    out(`${C.gray}* moonlight idle - /invest-config to enable${C.reset}`);
     return;
   }
   if (!st) {
     if (mode === 'events') return;
-    out(`${C.cyan}* moonlighter${C.reset} ${C.dim}warming up...${C.reset}`);
+    out(`${C.cyan}* moonlight${C.reset} ${C.dim}warming up...${C.reset}`);
     return;
   }
 
@@ -110,7 +110,7 @@ function main() {
     const size = p.notional ? `$${p.notional}` : `${p.qty || ''}`.trim();
     let t = `PROPOSAL: ${(p.action || '').toUpperCase()} ${size} ${p.symbol || ''}`.replace(/\s+/g, ' ').trim();
     if (!p.notional && p.estCost) t += ` (~$${p.estCost})`;
-    t += ` - approve in moonlighter / RH app`;
+    t += ` - approve in moonlight / RH app`;
     return out(render({ text: t, color: C.yellow }));
   }
 
@@ -174,7 +174,7 @@ function buildCards(st, now) {
 }
 
 function render(card) {
-  const head = `${C.bold}${C.cyan}moonlighter${C.reset}`;
+  const head = `${C.bold}${C.cyan}moonlight${C.reset}`;
   const body = `${card.color || ''}${clip(card.text, 64)}${C.reset}`;
   return `${head} ${C.gray}>${C.reset} ${body}`;
 }

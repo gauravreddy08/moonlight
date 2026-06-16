@@ -1,4 +1,4 @@
-# moonlighter
+# moonlight
 
 > **Status: WIP / experimental.** Early work in progress, under active iteration.
 > It trades **real money** on a Robinhood Agentic account — run it in `propose`
@@ -6,7 +6,7 @@
 
 Claude moonlights as your trader while you code.
 
-moonlighter is a Claude Code plugin that runs a small, risk-bounded trading agent
+moonlight is a Claude Code plugin that runs a small, risk-bounded trading agent
 on your **real Robinhood Agentic account** — but only in the background, only
 when *you're* actively coding, and only when a run is genuinely due. It surfaces
 what it does as a live, scrolling **statusline ticker** (a `/pet` replacement),
@@ -38,7 +38,7 @@ continuous daemon, by design. The ticker shows how stale the data is.
 Claude credits are spent in **exactly one place**: the background trade-decision
 run. The ticker, state writes, notifications, and pop-ins are plain Node/bash.
 Before any run spawns, `bin/run-if-due.sh` checks: not already inside a
-background session (`MOONLIGHTER_BG`), `enabled`, no run already alive
+background session (`MOONLIGHT_BG`), `enabled`, no run already alive
 (single-flight PID lock), past `nextRunEpoch`, ≥60s since the last run, market
 open (if required), and under the daily cap. The run uses a cheaper model
 (`tradeModel`, default `claude-sonnet-4-6`).
@@ -47,7 +47,7 @@ open (if required), and under the daily cap. The run uses a cheaper model
 
 ```bash
 # load locally for testing
-claude --plugin-dir /path/to/moonlighter
+claude --plugin-dir /path/to/moonlight
 
 # connect your Robinhood Agentic account (one-time browser auth)
 claude mcp add robinhood-trading --transport http https://agent.robinhood.com/mcp/trading
@@ -68,19 +68,19 @@ line is the equivalent manual route / for non-plugin setups.
   (status, mode, surfaces, risk), or pass an instruction for one-shot edits like
   `/invest-config set cadence to 20` (cadence, market-hours, daily cap, model,
   symbol lists, strategy notes).
-Approving proposals (in `propose` mode): use the **dashboard** (`moonlighter` →
+Approving proposals (in `propose` mode): use the **dashboard** (`moonlight` →
 `a`/`r`) or your **Robinhood app**. The slickest path is `auto` mode + Robinhood's
 own "require approval" account setting, which pushes each trade to your phone with
 Approve/Deny buttons.
 
 ## Standalone CLI / dashboard (outside Claude Code)
 
-The same `moonlighter` command is a normal CLI. Install it globally so you can
+The same `moonlight` command is a normal CLI. Install it globally so you can
 configure and monitor from any terminal — no Claude session needed:
 
 ```bash
-cd /path/to/moonlighter && npm link    # exposes `moonlighter` globally
-moonlighter                            # opens the interactive dashboard (TUI)
+cd /path/to/moonlight && npm link    # exposes `moonlight` globally
+moonlight                            # opens the interactive dashboard (TUI)
 ```
 
 In the dashboard you can flip every setting (↑/↓ move, Space or ←/→ change),
@@ -91,15 +91,15 @@ a Claude session can call).
 
 For arbitrary values (a custom $ amount, a different model id, symbol lists),
 edit the config file directly: press **`e`** in the dashboard, or run
-`moonlighter edit` (opens `$EDITOR`). The file path is shown at the bottom of the
-dashboard. Scriptable too: `moonlighter get config`, `moonlighter set config mode auto`.
+`moonlight edit` (opens `$EDITOR`). The file path is shown at the bottom of the
+dashboard. Scriptable too: `moonlight get config`, `moonlight set config mode auto`.
 
 ## First run
 
 1. `/invest-config` → set tiny `budgetCap`/`maxPositionSize`, keep `mode propose`.
 2. `/invest-config enabled true`.
 3. Keep coding. When a run is due and you're active, a proposal pops into chat
-   and the ticker; approve it from the `moonlighter` dashboard (`a`) or RH app.
+   and the ticker; approve it from the `moonlight` dashboard (`a`) or RH app.
 4. Trust it? `/invest-config mode auto` (+ Robinhood "require approval" for
    phone-push Approve/Deny on each trade).
 

@@ -1,10 +1,10 @@
 {
-  "name": "moonlighter",
+  "name": "moonlight",
   "owner": { "name": "gtadkapally" },
-  "description": "Local marketplace for the moonlighter trading plugin.",
+  "description": "Local marketplace for the moonlight trading plugin.",
   "plugins": [
     {
-      "name": "moonlighter",
+      "name": "moonlight",
       "description": "Claude moonlights as your trader while you code: a credit-frugal Robinhood agent with a live statusline ticker, run only when you're active.",
       "version": "0.1.0",
       "source": "./"

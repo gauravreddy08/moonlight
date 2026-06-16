@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 /*
- * moonlighter — chat pop-in surfacer (asyncRewake Stop hook).
+ * moonlight — chat pop-in surfacer (asyncRewake Stop hook).
  *
  * Zero LLM calls. If a new trade has happened since the last one we surfaced,
  * print a one-line summary to stderr and exit 2 — Claude Code injects stderr
@@ -15,7 +15,7 @@ const path = require('path');
 const os = require('os');
 
 const DATA_DIR =
-  process.env.CLAUDE_PLUGIN_DATA || path.join(os.homedir(), '.moonlighter');
+  process.env.CLAUDE_PLUGIN_DATA || path.join(os.homedir(), '.moonlight');
 const STATE_PATH = path.join(DATA_DIR, 'state.json');
 const CONFIG_PATH = path.join(DATA_DIR, 'config.json');
 
@@ -56,13 +56,13 @@ const verb = latest.mode === 'proposal' ? 'proposed' : latest.action || 'traded'
 // Prefer the dollar (notional) amount for fractional buys; else show share qty.
 const size = latest.notional ? `$${latest.notional} of` : `${latest.qty ?? ''}`.trim();
 const line =
-  `[moonlighter] Background trade ${verb}: ${(latest.action || '').toUpperCase()} ` +
+  `[moonlight] Background trade ${verb}: ${(latest.action || '').toUpperCase()} ` +
   `${size} ${latest.symbol || ''}`.replace(/\s+/g, ' ').trim() +
   (latest.price ? ` @ $${latest.price}` : '') +
   `. Today's P&L ${pnlStr}.` +
   (latest.note ? ` ${latest.note}` : '') +
   (latest.mode === 'proposal'
-    ? ' Approve it in the moonlighter dashboard (run: moonlighter) or your Robinhood app.'
+    ? ' Approve it in the moonlight dashboard (run: moonlight) or your Robinhood app.'
     : '');
 
 process.stderr.write(line + '\n');

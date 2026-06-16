@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 'use strict';
 /*
- * moonlighter — shared state/config helper.
+ * moonlight — shared state/config helper.
  *
  * This file performs ZERO LLM calls. It is the only thing that touches
  * config.json / state.json, and it backs the statusline, the hooks, and the
  * slash commands. Keep it dependency-free (Node stdlib only) and fast.
  *
  * Usage:  node lib.js <command> [args...]
- * Data lives in $CLAUDE_PLUGIN_DATA (falls back to ~/.moonlighter for dev).
+ * Data lives in $CLAUDE_PLUGIN_DATA (falls back to ~/.moonlight for dev).
  */
 
 const fs = require('fs');
@@ -17,7 +17,7 @@ const os = require('os');
 
 const DATA_DIR =
   process.env.CLAUDE_PLUGIN_DATA ||
-  path.join(os.homedir(), '.moonlighter');
+  path.join(os.homedir(), '.moonlight');
 const CONFIG_PATH = path.join(DATA_DIR, 'config.json');
 const STATE_PATH = path.join(DATA_DIR, 'state.json');
 const RUNS_DIR = path.join(DATA_DIR, 'runs');
@@ -266,13 +266,13 @@ function run(argv) {
       );
       return;
     case 'ui':
-    case undefined: // bare `moonlighter` opens the interactive dashboard
+    case undefined: // bare `moonlight` opens the interactive dashboard
       ensureDir();
       if (!fs.existsSync(CONFIG_PATH)) writeConfig(DEFAULT_CONFIG);
       if (!fs.existsSync(STATE_PATH)) writeState(DEFAULT_STATE);
       return require('./ui.js').start(); // lazy require avoids a load cycle
     default:
-      process.stderr.write('moonlighter: unknown command: ' + cmd + '\n');
+      process.stderr.write('moonlight: unknown command: ' + cmd + '\n');
       process.exit(1);
   }
 }

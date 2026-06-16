@@ -1,12 +1,12 @@
 {
-  "name": "moonlighter",
+  "name": "moonlight",
   "version": "0.1.0",
   "description": "Claude moonlights as your trader while you code — a credit-frugal Robinhood agent with a live statusline ticker and an interactive terminal dashboard. Works as a Claude Code plugin and a standalone CLI/TUI.",
   "bin": {
-    "moonlighter": "bin/moonlighter"
+    "moonlight": "bin/moonlight"
   },
   "scripts": {
-    "start": "node bin/moonlighter"
+    "start": "node bin/moonlight"
   },
   "engines": {
     "node": ">=18"

@@ -1,7 +1,7 @@
 {
-  "name": "moonlighter",
+  "name": "moonlight",
   "version": "0.1.0",
   "description": "Claude moonlights as your trader while you code. A live, always-on Robinhood ticker in your statusline; a background agent that makes trades only when you're active. Credit-frugal by design.",
-  "author": { "name": "moonlighter" },
+  "author": { "name": "moonlight" },
   "keywords": ["robinhood", "trading", "statusline", "ticker", "investing", "agentic"]
 }

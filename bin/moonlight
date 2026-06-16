@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
-// The `moonlighter` command. Two ways it's on PATH:
+// The `moonlight` command. Two ways it's on PATH:
 //   - inside Claude Code, the plugin's bin/ is auto-added to the Bash PATH
 //   - outside Claude Code, `npm link` / global install exposes it as a CLI
-// Bare `moonlighter` (no args) opens the interactive TUI dashboard.
+// Bare `moonlight` (no args) opens the interactive TUI dashboard.
 require('./lib.js').run(process.argv.slice(2));

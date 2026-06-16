@@ -1,15 +1,15 @@
 ---
-name: moonlighter
-description: The trading brain for the moonlighter plugin. Use when running a background trading cycle, or when the user wants to review their portfolio, talk to the trading agent, change trading config, or act on a pending proposal. Reads config/state via the bundled `moonlighter` command and trades via the Robinhood agentic MCP.
-allowed-tools: Read, Write, Bash, mcp__plugin_moonlighter_robinhood-trading__*
+name: moonlight
+description: The trading brain for the moonlight plugin. Use when running a background trading cycle, or when the user wants to review their portfolio, talk to the trading agent, change trading config, or act on a pending proposal. Reads config/state via the bundled `moonlight` command and trades via the Robinhood agentic MCP.
+allowed-tools: Read, Write, Bash, mcp__plugin_moonlight_robinhood-trading__*
 ---
 
-# moonlighter — trading brain
+# moonlight — trading brain
 
 You manage a real Robinhood **Agentic account** on the user's behalf, in small,
 risk-bounded steps. You run in two situations:
 
-- **Background cycle** — invoked headlessly (`MOONLIGHTER_BG=1`) by the Stop /
+- **Background cycle** — invoked headlessly (`MOONLIGHT_BG=1`) by the Stop /
   SessionStart hook when a run is due. Do exactly one cycle, be terse, stop.
 - **Interactive** — invoked by `/portfolio` so the user can review, ask
   questions, or trigger a run manually.
@@ -19,14 +19,14 @@ Everything about credits, scheduling, and surfacing is handled by plain scripts.
 
 ## 0. Helper command
 
-All config/state access goes through the bundled **`moonlighter`** command (on
+All config/state access goes through the bundled **`moonlight`** command (on
 your PATH — call it as a bare command, do NOT prefix paths or use
 `$CLAUDE_PLUGIN_ROOT`). It manages its own data dir. Never hand-edit the JSON.
 Read everything you need in one or two Bash calls.
 
 ```bash
-moonlighter get config      # full config
-moonlighter get state       # full state
+moonlight get config      # full config
+moonlight get state       # full state
 ```
 
 ## 1. Read config and respect it absolutely
@@ -46,10 +46,10 @@ Key fields: `enabled`, `mode` (`auto` | `propose`), `budgetCap`,
 ## 1b. Honor a pending user decision first
 
 The user can approve/reject a proposal from the standalone dashboard
-(`moonlighter` TUI). Check `state.pendingProposal` BEFORE doing anything else:
+(`moonlight` TUI). Check `state.pendingProposal` BEFORE doing anything else:
 - if it has `"userDecision":"approve"` → place exactly that order via the MCP,
-  record the fill (`moonlighter add-trade ...`), clear it
-  (`moonlighter set state pendingProposal null`), then finish. Don't form a new
+  record the fill (`moonlight add-trade ...`), clear it
+  (`moonlight set state pendingProposal null`), then finish. Don't form a new
   idea this cycle.
 - if it has `"userDecision":"reject"` → clear it and finish.
 
@@ -82,20 +82,20 @@ limits and buying power.
 
 **`auto`:** place the notional order via the MCP, then record it:
 ```bash
-moonlighter add-trade '{"action":"buy","symbol":"NVDA","notional":10,"qty":0.081,"price":123.45,"note":"momentum, fractional"}'
+moonlight add-trade '{"action":"buy","symbol":"NVDA","notional":10,"qty":0.081,"price":123.45,"note":"momentum, fractional"}'
 ```
 
 **`propose`:** do NOT place the order. Write a proposal; the user approves it
-from the **moonlighter dashboard** (`moonlighter` TUI → `a`) — which sets
+from the **moonlight dashboard** (`moonlight` TUI → `a`) — which sets
 `userDecision:"approve"` for you to honor next cycle (see step 1b) — or from
 their **Robinhood app**:
 ```bash
-moonlighter set state pendingProposal '{"id":"p123","action":"buy","symbol":"NVDA","notional":10,"qty":0.081,"estCost":10,"rationale":"momentum"}'
+moonlight set state pendingProposal '{"id":"p123","action":"buy","symbol":"NVDA","notional":10,"qty":0.081,"estCost":10,"rationale":"momentum"}'
 ```
 Also record it as a trade entry with `"mode":"proposal"` so the chat pop-in and
 ticker surface it:
 ```bash
-moonlighter add-trade '{"action":"buy","symbol":"NVDA","notional":10,"qty":0.081,"price":123.45,"mode":"proposal","note":"awaiting approval"}'
+moonlight add-trade '{"action":"buy","symbol":"NVDA","notional":10,"qty":0.081,"price":123.45,"mode":"proposal","note":"awaiting approval"}'
 ```
 
 > Tip: for the smoothest approvals, run in `auto` mode and turn on **"require
@@ -111,10 +111,10 @@ Refresh the data the statusline rotates through. The ticker is pure presentation
 — it cycles among these views every 5 min on its own, with NO further agent
 calls — so store rich, current values once per cycle:
 ```bash
-moonlighter set state todaysPnl 42.17
-moonlighter set state positions '[{"symbol":"NVDA","qty":3,"value":370,"dayPct":1.4}]'
-moonlighter set state account '{"buyingPower":5.00,"accountValue":375.00}'
-moonlighter headline "Bought $5 NVDA - riding momentum"
+moonlight set state todaysPnl 42.17
+moonlight set state positions '[{"symbol":"NVDA","qty":3,"value":370,"dayPct":1.4}]'
+moonlight set state account '{"buyingPower":5.00,"accountValue":375.00}'
+moonlight headline "Bought $5 NVDA - riding momentum"
 ```
 Use plain ASCII in headlines (hyphens, not em dashes). Keep each headline short.
 
@@ -123,9 +123,9 @@ Use plain ASCII in headlines (hyphens, not em dashes). Keep each headline short.
 Only if `surfaces.desktopNotif` is true and something noteworthy happened
 (a trade placed or a proposal raised). On macOS:
 ```bash
-osascript -e 'display notification "BUY 1 NVDA @ $123.45  ·  P&L +$42.17" with title "moonlighter"' 2>/dev/null || true
+osascript -e 'display notification "BUY 1 NVDA @ $123.45  ·  P&L +$42.17" with title "moonlight"' 2>/dev/null || true
 ```
-(Linux fallback: `notify-send "moonlighter" "..."`.) Never fail the cycle if the
+(Linux fallback: `notify-send "moonlight" "..."`.) Never fail the cycle if the
 notifier is missing.
 
 ## 7. Finish — set your own next invoke time and release the lock
@@ -136,7 +136,7 @@ watching, later when quiet. `finish` also releases the single-flight lock.
 
 ```bash
 # e.g. ~20 minutes from now: $(date +%s) + 1200
-moonlighter finish "$(( $(date +%s) + 1200 ))"
+moonlight finish "$(( $(date +%s) + 1200 ))"
 ```
 
 If you omit the argument, the configured `cadenceMinutes` is used. **Always call

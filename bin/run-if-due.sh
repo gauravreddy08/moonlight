@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# moonlighter — interval gate + single-flight background trade spawn.
+# moonlight — interval gate + single-flight background trade spawn.
 #
 # This is the ONLY place that spends Claude credits, and only when a trade run
 # is genuinely due. Everything here up to the spawn is plain shell/node.
@@ -18,7 +18,7 @@ get() { node "$LIB" get "$@" 2>/dev/null; }
 
 # 1. Recursion kill-switch: a background trade session itself fires
 #    SessionStart/Stop hooks. Never let it spawn another run.
-[ "${MOONLIGHTER_BG:-}" = "1" ] && exit 0
+[ "${MOONLIGHT_BG:-}" = "1" ] && exit 0
 
 # 2. Globally enabled?
 [ "$(get config enabled)" = "true" ] || exit 0
@@ -61,20 +61,20 @@ ts="$(date +%Y%m%d-%H%M%S)"
 log="$RUNS/run-$ts.log"
 model="$(get config tradeModel)"
 
-prompt="You are moonlighter's background trading agent. Read and follow the \
-instructions in $ROOT/skills/moonlighter/SKILL.md exactly. Your plugin data \
+prompt="You are moonlight's background trading agent. Read and follow the \
+instructions in $ROOT/skills/moonlight/SKILL.md exactly. Your plugin data \
 directory is $DATA. Run ONE trading cycle now, then stop. Be concise; spend as \
 few tokens as possible."
 
-# Spawn detached. MOONLIGHTER_BG=1 disarms the gate inside this child session.
+# Spawn detached. MOONLIGHT_BG=1 disarms the gate inside this child session.
 # The child is a fresh `claude` without this plugin loaded, so put bin/ on its
-# PATH — that's how the bare `moonlighter` command resolves inside the run.
+# PATH — that's how the bare `moonlight` command resolves inside the run.
 # Tools are scoped so the run never prompts for permission.
-MOONLIGHTER_BG=1 CLAUDE_PLUGIN_DATA="$DATA" CLAUDE_PLUGIN_ROOT="$ROOT" \
+MOONLIGHT_BG=1 CLAUDE_PLUGIN_DATA="$DATA" CLAUDE_PLUGIN_ROOT="$ROOT" \
   PATH="$ROOT/bin:$PATH" \
   nohup claude -p "$prompt" \
   ${model:+--model "$model"} \
-  --allowedTools "mcp__plugin_moonlighter_robinhood-trading__*,Read,Write,Bash" \
+  --allowedTools "mcp__plugin_moonlight_robinhood-trading__*,Read,Write,Bash" \
   >"$log" 2>&1 &
 
 echo $! >"$LOCK"

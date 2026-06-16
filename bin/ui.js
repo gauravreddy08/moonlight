@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 /*
- * moonlighter — interactive terminal dashboard. Zero LLM calls.
+ * moonlight — interactive terminal dashboard. Zero LLM calls.
  *
  * A real keyboard-driven TUI (raw mode):
  *   up / down     move the selection
@@ -9,12 +9,12 @@
  *   a / r         approve / reject the pending proposal
  *   q / esc       quit
  *
- * Reads/writes the same ~/.moonlighter/{config,state}.json the plugin uses, so
+ * Reads/writes the same ~/.moonlight/{config,state}.json the plugin uses, so
  * you configure everything and act on proposals OUTSIDE Claude Code. Pure Node
  * stdlib — no dependencies.
  *
  * Free-text fields (symbol lists, strategy notes) are intentionally NOT in this
- * keypress UI; set them with the CLI:  moonlighter set config strategyNotes "…"
+ * keypress UI; set them with the CLI:  moonlight set config strategyNotes "…"
  */
 
 const readline = require('readline');
@@ -46,11 +46,11 @@ const MKT_HOURS = '9:30a-4:00p ET';
 // The editable settings. Each has a one-line `help` shown when highlighted, and
 // a `change(cfg, dir)` that cycles/steps the value (Space or <-/->, wrapping).
 // For arbitrary values (e.g. a custom $ amount or model id), edit the config
-// file directly — press `e` in the dashboard, or `moonlighter edit`.
+// file directly — press `e` in the dashboard, or `moonlight edit`.
 const ITEMS = [
   { label: 'Trading', help: 'Master on/off switch. When off, the agent never trades in the background.',
     show: (c) => (c.enabled ? `${C.green}ENABLED${C.reset}` : `${C.gray}disabled${C.reset}`), change: (c) => (c.enabled = !c.enabled) },
-  { label: 'Ticker', help: 'How often the moonlighter line shows in your status bar.',
+  { label: 'Ticker', help: 'How often the moonlight line shows in your status bar.',
     show: (c) => c.tickerMode || 'always', change: (c, d) => (c.tickerMode = cycleList(c.tickerMode || 'always', ['always', 'events', 'never'], d)) },
   { label: 'Hours', help: `When the agent may trade. Stocks only fill in US market hours (${MKT_HOURS}); crypto trades 24/7.`,
     show: (c) => (c.marketHoursOnly ? `market only (${MKT_HOURS})` : '24/7 (anytime)'), change: (c) => (c.marketHoursOnly = !c.marketHoursOnly) },
@@ -78,7 +78,7 @@ function frame(cfg, st, sel, flash) {
   const pnlC = pnl >= 0 ? C.green : C.red;
   const L = [];
   L.push('');
-  L.push(`  ${C.bold}${C.cyan}moonlighter${C.reset}   ${cfg.enabled ? C.green + 'enabled' : C.gray + 'disabled'}${C.reset}`);
+  L.push(`  ${C.bold}${C.cyan}moonlight${C.reset}   ${cfg.enabled ? C.green + 'enabled' : C.gray + 'disabled'}${C.reset}`);
   L.push('');
   L.push(`  today P/L     ${pnlC}${pnl >= 0 ? '+' : '-'}$${Math.abs(pnl).toFixed(2)}${C.reset}`);
   if (st.account && st.account.buyingPower != null) L.push(`  buying power  $${Number(st.account.buyingPower).toFixed(2)}`);
@@ -141,7 +141,7 @@ function stripForRev(it, cfg, label) {
 
 function start() {
   if (!process.stdin.isTTY) {
-    process.stdout.write('moonlighter dashboard needs an interactive terminal (TTY).\nUse the CLI instead, e.g. `moonlighter get config`.\n');
+    process.stdout.write('moonlight dashboard needs an interactive terminal (TTY).\nUse the CLI instead, e.g. `moonlight get config`.\n');
     return;
   }
   let cfg = lib.readConfig();
@@ -164,7 +164,7 @@ function start() {
     process.stdin.removeListener('keypress', onKey);
     process.stdin.setRawMode(false);
     process.stdout.write('\x1b[?25h\x1b[2J\x1b[H'); // show cursor, clear
-    process.stdout.write('moonlighter dashboard closed.\n');
+    process.stdout.write('moonlight dashboard closed.\n');
     process.exit(0);
   };
 

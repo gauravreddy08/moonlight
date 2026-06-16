@@ -1,5 +1,7 @@
 # moonlight
 
+![moonlight cover](assets/cover.png)
+
 > **Status: WIP / experimental.** Early work in progress, under active iteration.
 > It trades **real money** on a Robinhood Agentic account — run it in `propose`
 > mode with tiny limits, expect rough edges, and review before relying on it.

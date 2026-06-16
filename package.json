@@ -1,0 +1,27 @@
+{
+  "name": "moonlighter",
+  "version": "0.1.0",
+  "description": "Claude moonlights as your trader while you code — a credit-frugal Robinhood agent with a live statusline ticker and an interactive terminal dashboard. Works as a Claude Code plugin and a standalone CLI/TUI.",
+  "bin": {
+    "moonlighter": "bin/moonlighter"
+  },
+  "scripts": {
+    "start": "node bin/moonlighter"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/",
+    "statusline.js",
+    "skills/",
+    "commands/",
+    "hooks/",
+    ".mcp.json",
+    "settings.json",
+    ".claude-plugin/",
+    "README.md"
+  ],
+  "keywords": ["claude-code", "plugin", "robinhood", "trading", "statusline", "tui", "cli"],
+  "license": "MIT"
+}

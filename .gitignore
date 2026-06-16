@@ -1,0 +1,5 @@
+node_modules/
+.remember/
+*.log
+.DS_Store
+# runtime data lives in ~/.moonlighter, never in the repo
